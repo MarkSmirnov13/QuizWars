@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import './database/queries/database'
+
 const TelegramBot = require('node-telegram-bot-api')
 
 const token = `${process.env.TELEGRAM_TOKEN}`
