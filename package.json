@@ -6,7 +6,7 @@
   "author": "Mark Smirnov and Maksim Lukianchuk",
   "license": "MIT",
   "scripts": {
-    "start": "node src/main.js"
+    "start": "nodemon --exec babel-node src/main.js"
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.30.0",
@@ -16,6 +16,7 @@
     "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
     "@babel/node": "^7.6.1",
-    "@babel/preset-env": "^7.6.0"
+    "@babel/preset-env": "^7.6.0",
+    "nodemon": "^1.19.2"
   }
 }
