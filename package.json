@@ -1,0 +1,9 @@
+{
+  "name": "QuizWars",
+  "version": "1.0.0",
+  "description": "Quiz Wars Telegram Bot",
+  "main": "index.js",
+  "repository": "https://github.com/MarkSmirnov13/QuizWars",
+  "author": "Mark Smirnov and Max Lukianchuk",
+  "license": "MIT"
+}
