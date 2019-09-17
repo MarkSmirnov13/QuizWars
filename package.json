@@ -6,6 +6,7 @@
   "author": "Mark Smirnov and Maksim Lukianchuk",
   "license": "MIT",
   "dependencies": {
-    "node-telegram-bot-api": "^0.30.0"
+    "node-telegram-bot-api": "^0.30.0",
+    "ramda": "^0.26.1"
   }
 }
