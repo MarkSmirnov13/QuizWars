@@ -9,6 +9,7 @@
     "start": "nodemon --exec babel-node src/main.js"
   },
   "dependencies": {
+    "dotenv": "^8.1.0",
     "node-telegram-bot-api": "^0.30.0",
     "ramda": "^0.26.1"
   },
