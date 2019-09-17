@@ -5,7 +5,11 @@
   "repository": "https://github.com/MarkSmirnov13/QuizWars",
   "author": "Mark Smirnov and Maksim Lukianchuk",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/main.js"
+  },
   "dependencies": {
-    "node-telegram-bot-api": "^0.30.0"
+    "node-telegram-bot-api": "^0.30.0",
+    "ramda": "^0.26.1"
   }
 }
