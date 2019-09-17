@@ -9,9 +9,13 @@
     "start": "nodemon --exec babel-node src/main.js"
   },
   "dependencies": {
+    "bluebird-retry": "^0.11.0",
+    "chalk": "^2.4.2",
     "dotenv": "^8.1.0",
+    "mysql2": "^1.7.0",
     "node-telegram-bot-api": "^0.30.0",
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "yn": "^3.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
