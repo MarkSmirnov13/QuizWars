@@ -1,17 +1,21 @@
-import connection from './database'
+import {query, sql} from '../utils'
 
-export const findUserById = userId => connection
-    .promise()
-    .query(
-        'SELECT `telegramId` FROM `user` where `id` = ?', [userId]
-    ).then(([[rows]]) => rows)
+export const findUserById = userId => query(
+  sql`
+    select
+    id,
+    telegramId
+    from user
+    where
+    id = ${userId}
+  `
+).then(([data]) => data)
 
-export const insertId = id => (
-    connection.query(
-    'INSERT INTO `user`(`telegramId`) VALUES (?)', [id],
-    function (err, results, fields) {
-        console.log(fields)
-        console.log(results)
-    })
-)
-
+// export const insertId = id => (
+//     connection.query(
+//     'INSERT INTO `user`(`telegramId`) VALUES (?)', [id],
+//     function (err, results, fields) {
+//         console.log(fields)
+//         console.log(results)
+//     })
+// )
