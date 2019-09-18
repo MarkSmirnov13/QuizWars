@@ -1,22 +1,27 @@
 import 'dotenv/config'
 import './database/queries/database'
-import {findUserById, insertId} from './database/queries/user'
+import {findUserById, addNewUser, getRandomTask} from './database/queries/user'
 
 const TelegramBot = require('node-telegram-bot-api')
 
-const token = `${process.env.TELEGRAM_TOKEN}`
-const bot = new TelegramBot(token, {polling: true})
+const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true})
 
-bot.on('message', (msg) => {
-    const chatId = msg.chat.id
+/**
+ * Добавляет id нового пользователя в базу данных
+ *
+ * @param ({chat: {id}}) message
+ */
 
-    bot.sendMessage(chatId, 'Received your message')
-    //bot.sendMessage(chatId, findUserById(1))
-    findUserById(1).then(data => console.log(data))
-});
+bot.onText(/\/start/, ({chat: {id}}) => {
+    addNewUser(id)
+      .then(() => bot.sendMessage(id, 'Welcome to the club buddy!'))
+})
 
-bot.onText(/\/echo/, (msg, match) => {
-    const chatId = msg.chat.id;
-    insertId(2)
-    bot.sendMessage(chatId, 'Inserted');
-});
+bot.onText(/\/random/, ({chat: {id}}) => {
+    getRandomTask()
+      .then(task => bot.sendMessage(
+        id,
+        task.content,
+        {parse_mode : 'Markdown'}
+        ))
+})
