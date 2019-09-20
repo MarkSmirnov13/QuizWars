@@ -32,19 +32,13 @@ bot.onText(/\/random/, ({chat: {id}}) => {
         {
             parse_mode : 'Markdown',
             reply_markup: {
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                keyboard: [
-                    [path(['option1'], task)],
-                    [path(['option2'], task)],
-                    [path(['option3'], task)],
-                    [path(['option4'], task)],
+                inline_keyboard: [
+                    [{text: path(['option1'], task), callback_data: 'option1'}],
+                    [{text: path(['option2'], task), callback_data: 'option2'}],
+                    [{text: path(['option3'], task), callback_data: 'option3'}],
+                    [{text: path(['option4'], task), callback_data: 'option4'}],
                 ],
             },
         }
         ))
-})
-
-bot.on('callback_query', (data) => {
-    console.log(data)
 })
