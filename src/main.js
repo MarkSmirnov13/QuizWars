@@ -24,31 +24,27 @@ bot.onText(/\/start/, ({chat: {id}}) => {
  * @param ({chat: {id}}) message
  */
 
-// bot.onText(/\/random/, ({chat: {id}}) => {
-//     getRandomTask()
-//       .then(task => bot.sendMessage(
-//         id,
-//         task.content,
-//         {
-//             parse_mode : 'Markdown',
-//             reply_markup: {
-//                 resize_keyboard: true,
-//                 one_time_keyboard: true,
-//                 keyboard: [
-//                     [path(['option1'], task)],
-//                     [path(['option2'], task)],
-//                     [path(['option3'], task)],
-//                     [path(['option4'], task)],
-//                 ],
-//             }
-//         }
-//         )
-//         .then(() => bot.on('message', ({text}) => {
-//             bot.sendMessage(
-//               id,
-//               task[task.correctOption] === text ? 'вы правы' : 'лошара'
-//             )
-//         })))
-// })
+bot.onText(/\/random/, ({chat: {id}}) => {
+    getRandomTask()
+      .then(task => bot.sendMessage(
+        id,
+        task.content,
+        {
+            parse_mode : 'Markdown',
+            reply_markup: {
+                resize_keyboard: true,
+                one_time_keyboard: true,
+                keyboard: [
+                    [path(['option1'], task)],
+                    [path(['option2'], task)],
+                    [path(['option3'], task)],
+                    [path(['option4'], task)],
+                ],
+            },
+        }
+        ))
+})
 
-
+bot.on('callback_query', (data) => {
+    console.log(data)
+})
