@@ -39,6 +39,12 @@ bot.onText(/\/random/, ({chat: {id}}) => {
         ))
 })
 
+/**
+ * Обрабатывает ответы пользователя
+ *
+ * @param ({message: {chat, message_id}, data}) callback
+ */
+
 bot.on('callback_query', ({message: {chat, message_id}, data}) => {
   const [taskId, answerId] = data.split('_')
   findTaskById(taskId)
