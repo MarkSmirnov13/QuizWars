@@ -1,7 +1,8 @@
-import {path} from 'ramda'
 import 'dotenv/config'
+
 import './database/queries/database'
-import {findUserById, addNewUser, getRandomTask, findTaskById} from './database/queries/user'
+import {addNewUser, getRandomTask, findTaskById} from './database/queries/user'
+import {taskToKeyboard, provideAnswer} from './helpers'
 
 const TelegramBot = require('node-telegram-bot-api')
 
@@ -32,32 +33,21 @@ bot.onText(/\/random/, ({chat: {id}}) => {
         {
             parse_mode : 'Markdown',
             reply_markup: {
-                inline_keyboard: [
-                    [{text: path(['option1'], task), callback_data: `${task.id}_1`}],
-                    [{text: path(['option2'], task), callback_data: `${task.id}_2`}],
-                    [{text: path(['option3'], task), callback_data: `${task.id}_3`}],
-                    [{text: path(['option4'], task), callback_data: `${task.id}_4`}],
-                ],
+                inline_keyboard: taskToKeyboard(task),
             },
         }
         ))
 })
 
-bot.on('callback_query', message => {
-  const answer = message.data.split('_')
-  findTaskById(answer[0])
-    .then(task => bot.editMessageReplyMarkup(
+bot.on('callback_query', ({message: {chat, message_id}, data}) => {
+  const [taskId, answerId] = data.split('_')
+  findTaskById(taskId)
+      .then(task => bot.editMessageText(
+        provideAnswer(task, answerId),
       {
-        inline_keyboard: [
-          [{text: (task.correctOption == answer ? '✅' : '❌') + path(['option1'], task), callback_data: `${task.id}_1`}],
-          [{text: (task.correctOption == answer ? '✅' : '❌') + path(['option2'], task), callback_data: `${task.id}_2`}],
-          [{text: (task.correctOption == answer ? '✅' : '❌') + path(['option3'], task), callback_data: `${task.id}_3`}],
-          [{text: (task.correctOption == answer ? '✅' : '❌') + path(['option4'], task), callback_data: `${task.id}_4`}],
-        ],
-      },
-      {
-        chat_id: message.message.chat.id,
-        message_id: message.message.message_id,
+        chat_id: chat.id,
+        message_id: message_id,
+        parse_mode : 'Markdown',
       }
     ))
 })
