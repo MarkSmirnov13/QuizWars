@@ -4,7 +4,8 @@ export const findUserById = userId => query(
   sql`
     select
     id,
-    telegramId
+    telegramId,
+    score
     from user
     where
     id = ${userId}

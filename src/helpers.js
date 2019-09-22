@@ -24,6 +24,6 @@ export const provideKeyboard = task => (
  */
 
 export const resolveAnswer = ({content, correctOption, ...task}, answerId) =>
-  `${content}\n${(correctOption === answerId) ?
-    '✅ Верно! Правильный ответ: ' + task[`option${correctOption}`] :
-    '❌ Неверно! Правильный ответ: ' + task[`option${correctOption}`]}`
+  `${content}
+  ${correctOption === answerId ? '✅ Верно! ' : '❌ Неверно! '}
+  Правильный ответ: ${task[`option${correctOption}`]}`
