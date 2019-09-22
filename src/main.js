@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import {ifElse, propEq} from 'ramda'
 
 import './database/queries/database'
 import {addNewUser, getRandomTask, findTaskById} from './database/queries/user'
@@ -13,8 +14,8 @@ const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true})
  */
 
 bot.onText(/\/start/, ({chat: {id}}) => {
-    addNewUser(id)
-      .then(() => bot.sendMessage(id, 'Welcome to the club buddy!'))
+  addNewUser(id)
+    .then(() => bot.sendMessage(id, 'Welcome to the club buddy!'))
 })
 
 /**
@@ -22,17 +23,17 @@ bot.onText(/\/start/, ({chat: {id}}) => {
  */
 
 bot.onText(/\/random/, ({chat: {id}}) => {
-    getRandomTask()
-      .then(task => bot.sendMessage(
-        id,
-        task.content,
-        {
-            parse_mode : 'Markdown',
-            reply_markup: {
-                inline_keyboard: provideKeyboard(task),
-            },
-        }
-        ))
+  getRandomTask()
+    .then(task => bot.sendMessage(
+      id,
+      task.content,
+      {
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: provideKeyboard(task),
+        },
+      }
+    ))
 })
 
 /**
@@ -42,12 +43,14 @@ bot.onText(/\/random/, ({chat: {id}}) => {
 bot.on('callback_query', ({message: {chat, message_id}, data}) => {
   const [taskId, answerId] = data.split('_')
   findTaskById(taskId)
-      .then(task => bot.editMessageText(
+    .then(task => {
+      bot.editMessageText(
         resolveAnswer(task, answerId),
-      {
-        chat_id: chat.id,
-        message_id: message_id,
-        parse_mode : 'Markdown',
-      }
-    ))
+        {
+          chat_id: chat.id,
+          message_id: message_id,
+          parse_mode: 'Markdown',
+        }
+      )
+    })
 })
