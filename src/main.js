@@ -1,7 +1,8 @@
-import {path} from 'ramda'
 import 'dotenv/config'
+
 import './database/queries/database'
-import {findUserById, addNewUser, getRandomTask} from './database/queries/user'
+import {addNewUser, getRandomTask, findTaskById} from './database/queries/user'
+import {provideKeyboard, resolveAnswer} from './helpers'
 
 const TelegramBot = require('node-telegram-bot-api')
 
@@ -32,19 +33,27 @@ bot.onText(/\/random/, ({chat: {id}}) => {
         {
             parse_mode : 'Markdown',
             reply_markup: {
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                keyboard: [
-                    [path(['option1'], task)],
-                    [path(['option2'], task)],
-                    [path(['option3'], task)],
-                    [path(['option4'], task)],
-                ],
+                inline_keyboard: provideKeyboard(task),
             },
         }
         ))
 })
 
-bot.on('callback_query', (data) => {
-    console.log(data)
+/**
+ * Обрабатывает ответы пользователя
+ *
+ * @param ({message: {chat, message_id}, data}) callback
+ */
+
+bot.on('callback_query', ({message: {chat, message_id}, data}) => {
+  const [taskId, answerId] = data.split('_')
+  findTaskById(taskId)
+      .then(task => bot.editMessageText(
+        resolveAnswer(task, answerId),
+      {
+        chat_id: chat.id,
+        message_id: message_id,
+        parse_mode : 'Markdown',
+      }
+    ))
 })
