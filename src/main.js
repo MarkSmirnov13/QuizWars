@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 import './database/queries/database'
 import {addNewUser, getRandomTask, findTaskById} from './database/queries/user'
-import {taskToKeyboard, provideAnswer} from './helpers'
+import {provideKeyboard, resolveAnswer} from './helpers'
 
 const TelegramBot = require('node-telegram-bot-api')
 
@@ -33,7 +33,7 @@ bot.onText(/\/random/, ({chat: {id}}) => {
         {
             parse_mode : 'Markdown',
             reply_markup: {
-                inline_keyboard: taskToKeyboard(task),
+                inline_keyboard: provideKeyboard(task),
             },
         }
         ))
@@ -49,7 +49,7 @@ bot.on('callback_query', ({message: {chat, message_id}, data}) => {
   const [taskId, answerId] = data.split('_')
   findTaskById(taskId)
       .then(task => bot.editMessageText(
-        provideAnswer(task, answerId),
+        resolveAnswer(task, answerId),
       {
         chat_id: chat.id,
         message_id: message_id,

@@ -1,4 +1,4 @@
-export const taskToKeyboard = task => (
+export const provideKeyboard = task => (
   [1, 2, 3, 4]
     .reduce((accum, el) => {
       task[`option${el}`] && accum.push(
@@ -8,7 +8,7 @@ export const taskToKeyboard = task => (
     }, new Array(0))
 )
 
-export const provideAnswer = ({content, correctOption, ...task}, answerId) =>
+export const resolveAnswer = ({content, correctOption, ...task}, answerId) =>
   `${content}\n${(correctOption === answerId) ?
-    '✅ Верно! ' + task[`option${correctOption}`] :
+    '✅ Верно! Правильный ответ: ' + task[`option${correctOption}`] :
     '❌ Неверно! Правильный ответ: ' + task[`option${correctOption}`]}`
