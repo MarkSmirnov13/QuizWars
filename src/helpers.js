@@ -1,3 +1,9 @@
+/**
+ * возвращает массив кнопок по ответам в задаче
+ *
+ * @param task
+ */
+
 export const provideKeyboard = task => (
   [1, 2, 3, 4]
     .reduce((accum, el) => {
@@ -7,6 +13,15 @@ export const provideKeyboard = task => (
       return accum
     }, new Array(0))
 )
+
+/**
+ * возвращает массив кнопок по ответам в задаче
+ *
+ * @param content Условие задачи
+ * @param correctOption Номер правильного ответа
+ * @param task
+ * @param answerId Номер ответа пользователя
+ */
 
 export const resolveAnswer = ({content, correctOption, ...task}, answerId) =>
   `${content}\n${(correctOption === answerId) ?

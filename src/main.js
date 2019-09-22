@@ -10,8 +10,6 @@ const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true})
 
 /**
  * Добавляет id нового пользователя в базу данных
- *
- * @param ({chat: {id}}) message
  */
 
 bot.onText(/\/start/, ({chat: {id}}) => {
@@ -21,8 +19,6 @@ bot.onText(/\/start/, ({chat: {id}}) => {
 
 /**
  * Предлагает пользователю рандомную задачу
- *
- * @param ({chat: {id}}) message
  */
 
 bot.onText(/\/random/, ({chat: {id}}) => {
@@ -41,8 +37,6 @@ bot.onText(/\/random/, ({chat: {id}}) => {
 
 /**
  * Обрабатывает ответы пользователя
- *
- * @param ({message: {chat, message_id}, data}) callback
  */
 
 bot.on('callback_query', ({message: {chat, message_id}, data}) => {
