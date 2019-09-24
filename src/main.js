@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import {pipe, join, map} from 'ramda'
 
 import './database/queries/database'
 
@@ -66,7 +67,7 @@ bot.on('callback_query', ({message: {chat, message_id}, data}) => {
 })
 
 /**
- * Добавляем новую задачу в базу и делаем рассылку новой задачи всем юзерам
+ * Добавляет новую задачу в базу и делаем рассылку новой задачи всем юзерам
  *
  * @param id id чата
  * @param username username автора задачи
@@ -93,9 +94,10 @@ bot.onText(/\/add_new_task/, ({chat: {id, username}}) => addNewTask(id, username
  * Выводим таблицу лидеров
  */
 bot.onText(/\/table/, msg => {
-  let raw = 'Таблица лидеров:\n'
-  getLeadersTable().then(p => console.log(p))
-  getLeadersTable().then(p => p.forEach(p => raw.concat(`@${p.username} - ${p.score} баллов\n`)))
-  console.log(raw)
-  bot.sendMessage(msg.chat.id, raw)
+  const header = 'Таблица лидеров:\n\n'
+  getLeadersTable()
+    .then(data => bot.sendMessage(msg.chat.id, header + pipe(
+      map(({username, score}) => `${username}: ${score}`),
+      join('\n')
+    )(data)))
 })

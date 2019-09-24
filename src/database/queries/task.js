@@ -8,6 +8,14 @@ export const getTotalTasks = () => query(
   `
 ).then(([p]) => p)
 
+export const getTasks = () => query(
+  sql`
+    select
+    id
+    from task
+  `
+)
+
 export const findTaskById = taskId => query(
   sql`
     select
@@ -23,12 +31,12 @@ export const findTaskById = taskId => query(
     from task
     where
     id = ${taskId}
-  `
+`
 ).then(([p]) => p)
 
 export const getRandomTask = () =>
-  getTotalTasks()
-    .then(({total}) => findTaskById(Math.floor(1 + Math.random() * total)))
+  getTasks()
+    .then(arr => findTaskById(arr[Math.floor(Math.random() * arr.length)].id))
 
 export const addNewTaskToDb = content => query(
   sql`
