@@ -69,23 +69,25 @@ bot.on('callback_query', ({message: {chat, message_id}, data}) => {
  * Добавляем новую задачу в базу и делаем рассылку новой задачи всем юзерам
  *
  * @param id id чата
+ * @param username username автора задачи
  * @param content Объект с задачей
  * @param i Счетчик
  */
-const addNewTask = (id, content = {}, i = 0) => bot.sendMessage(id, text[i], replyOptions)
+const addNewTask = (id, username, content = {}, i = 0) => bot.sendMessage(id, text[i], replyOptions)
   .then(({chat, message_id}) => {
     bot.onReplyToMessage(chat.id, message_id, message => {
       content[keys[i]] = message.text
       if (i < text.length - 1)
-        addNewTask(id, content, ++i)
+        addNewTask(id, username, content, ++i)
       else {
+        content[keys[0]] += `\n\nАвтор задачи: @${username}\n`
         bot.sendMessage(id, 'Молодец! Задача будет добавлена!')
         addNewTaskMethod(content, id).then(() => Promise.resolve())
       }
     })
   })
 
-bot.onText(/\/add_new_task/, ({chat: {id}}) => addNewTask(id))
+bot.onText(/\/add_new_task/, ({chat: {id, username}}) => addNewTask(id, username))
 
 /**
  * Выводим таблицу лидеров

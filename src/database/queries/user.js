@@ -33,6 +33,10 @@ export const getLeadersTable = () => query(
     score
     from user
     order by score desc
-    limit 5
+    limit 10
   `
+)
+
+export const getMyPosition = () => query(
+
 )
