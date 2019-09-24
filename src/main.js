@@ -1,4 +1,6 @@
 require('dotenv').config()
+import {pipe, join, map} from 'ramda'
+
 import './database/queries/database'
 
 import {addNewUser, getLeadersTable, getMyPosition} from './database/queries/user'
@@ -98,9 +100,9 @@ bot.onText(/\/table/, async ({chat: {id}}) => {
   const {total} = await getMyPosition(id)
   const footer = 'Ваше место в рейтинге: '
 
-  // getLeadersTable()
-  //   .then(data => bot.sendMessage(id, header + pipe(
-  //     map(({username, score}) => `@${username}: ${score}`),
-  //     join('\n')
-  //   )(data) + '\n\n' + footer + (total + 1)))
+  getLeadersTable()
+    .then(data => bot.sendMessage(id, header + pipe(
+      map(({username, score}) => `@${username}: ${score}`),
+      join('\n')
+    )(data) + '\n\n' + footer + (total + 1)))
 })
