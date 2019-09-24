@@ -8,6 +8,8 @@ export const query = (sqlInputQuery, values) =>
         : sqlInputQuery
       const resultSql = mysql.format(sqlQuery, values)
 
+      console.log(resultSql)
+
       connection.query(resultSql, (error, results) => {
         resolve(results)
       })

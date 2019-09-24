@@ -26,7 +26,8 @@ export const findTaskById = taskId => query(
     option2,
     option3,
     option4,
-    correctOption
+    correctOption,
+    worth
     from task
     where
     id = ${taskId}
@@ -41,6 +42,6 @@ export const addNewTaskToDb = content => query(
   sql`
     insert ignore into
     task (correctOption, content, option1, option2, option3, option4, worth)
-    values (${content[5]}, ${content[0]}, ${content[1]}, ${content[2]}, ${content[3]}, ${content[4]}, ${content[6]})
+    values (${content['correctOption']}, ${content['content']}, ${content['option1']}, ${content['option2']}, ${content['option3']}, ${content['option4']}, ${content['worth']})
   `
 )
