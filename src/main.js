@@ -55,8 +55,9 @@ bot.on('callback_query', ({message: {chat, message_id}, data}) => {
 })
 
 /**
- * Добавляем новую задачу в базу
+ * Добавляет новую задачу в базу
  */
+
 const opts = {
     reply_markup: JSON.stringify(
         {
