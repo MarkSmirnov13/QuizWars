@@ -3,7 +3,7 @@ import {pipe, join, map} from 'ramda'
 
 import './database/queries/database'
 
-import {addNewUser, getLeadersTable} from './database/queries/user'
+import {addNewUser, getLeadersTable, getMyPosition} from './database/queries/user'
 
 import {getRandomTask, findTaskById} from './database/queries/task'
 import {addNewTaskMethod, checkUserSolveTask, provideKeyboard, resolveAnswer} from './helpers'
@@ -91,13 +91,16 @@ const addNewTask = (id, username, content = {}, i = 0) => bot.sendMessage(id, te
 bot.onText(/\/add_new_task/, ({chat: {id, username}}) => addNewTask(id, username))
 
 /**
- * Выводим таблицу лидеров
+ * Выводим таблицу лидеров и место пользователя в рейтинге
  */
-bot.onText(/\/table/, msg => {
+bot.onText(/\/table/, async ({chat: {id}}) => {
   const header = 'Таблица лидеров:\n\n'
+  const {total} = await getMyPosition(id)
+  const footer = 'Ваше место в рейтинге: '
+
   getLeadersTable()
-    .then(data => bot.sendMessage(msg.chat.id, header + pipe(
-      map(({username, score}) => `${username}: ${score}`),
+    .then(data => bot.sendMessage(id, header + pipe(
+      map(({username, score}) => `@${username}: ${score}`),
       join('\n')
-    )(data)))
+    )(data) + '\n\n' + footer + (total + 1)))
 })
