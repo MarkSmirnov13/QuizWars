@@ -18,7 +18,11 @@ const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true})
  */
 bot.onText(/\/start/, ({chat: {id, username}}) => {
   addNewUser(id, username)
-    .then(() => bot.sendMessage(id, 'Welcome to the club, buddy!'))
+    .then(() => bot.sendMessage(id, 'Welcome to the club, buddy!' +
+      '/start - начать взаимодействие с ботом' +
+      '/random - решить рандомную задачку' +
+      '/add_new_task - добавить новую задачку' +
+      '/table - посмотреть таблицу лидеров и свою позицию в рейтинге'))
 })
 
 /**
