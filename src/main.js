@@ -1,4 +1,5 @@
-import 'dotenv/config'
+require('dotenv').config()
+
 import {pipe, join, map} from 'ramda'
 
 import './database/queries/database'

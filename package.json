@@ -6,7 +6,7 @@
   "author": "Mark Smirnov and Maksim Lukianchuk",
   "license": "MIT",
   "scripts": {
-    "start": "node src/main.js"
+    "start": "nodemon --exec babel-node src/main.js"
   },
   "engines": {
     "node": "v11.11.0"

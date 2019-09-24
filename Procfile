@@ -1,1 +1,1 @@
-worker: node src/main.js
+worker: nodemon --exec babel-node src/main.js
