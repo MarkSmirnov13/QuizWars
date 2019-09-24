@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import {pipe, join, map} from 'ramda'
 
 import './database/queries/database'
 
@@ -88,13 +89,17 @@ const addNewTask = (id, content = {}, i = 0) => bot.sendMessage(id, text[i], rep
 
 bot.onText(/\/add_new_task/, ({chat: {id}}) => addNewTask(id))
 
+
+//getLeadersTable().then(p => p.forEach(p => raw.concat(`@${p.username} - ${p.score} баллов\n`)))
+
 /**
  * Выводим таблицу лидеров
  */
 bot.onText(/\/table/, msg => {
-  let raw = 'Таблица лидеров:\n'
-  getLeadersTable().then(p => console.log(p))
-  getLeadersTable().then(p => p.forEach(p => raw.concat(`@${p.username} - ${p.score} баллов\n`)))
-  console.log(raw)
-  bot.sendMessage(msg.chat.id, raw)
+  const header = 'Таблица лидеров:\n\n'
+  getLeadersTable()
+    .then(data => bot.sendMessage(msg.chat.id, header + pipe(
+      map(({username, score}) => `${username}: ${score}`),
+      join('\n')
+    )(data)))
 })
