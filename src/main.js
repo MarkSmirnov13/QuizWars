@@ -31,7 +31,6 @@ export const sendTask = (id, task) => {
     id,
     task.content,
     {
-      parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: provideKeyboard(task),
       },
@@ -60,7 +59,6 @@ bot.on('callback_query', ({message: {chat, message_id}, data}) => {
         {
           chat_id: chat.id,
           message_id: message_id,
-          parse_mode: 'Markdown',
         }
       )
     })
