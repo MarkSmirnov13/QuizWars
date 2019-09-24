@@ -33,6 +33,15 @@ export const getLeadersTable = () => query(
     score
     from user
     order by score desc
-    limit 5
+    limit 10
   `
 )
+
+export const getMyPosition = userTelegramId => query(
+  sql`
+    select
+    count(id) as total
+    from user
+    where score > (select score from user where telegramId = ${userTelegramId})
+  `
+).then(([p]) => p)

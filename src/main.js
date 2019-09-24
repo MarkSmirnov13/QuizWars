@@ -3,7 +3,7 @@ import {pipe, join, map} from 'ramda'
 
 import './database/queries/database'
 
-import {addNewUser, getLeadersTable} from './database/queries/user'
+import {addNewUser, getLeadersTable, getMyPosition} from './database/queries/user'
 
 import {getRandomTask, findTaskById} from './database/queries/task'
 import {addNewTaskMethod, checkUserSolveTask, provideKeyboard, resolveAnswer} from './helpers'
@@ -70,36 +70,37 @@ bot.on('callback_query', ({message: {chat, message_id}, data}) => {
  * Добавляет новую задачу в базу и делаем рассылку новой задачи всем юзерам
  *
  * @param id id чата
+ * @param username username автора задачи
  * @param content Объект с задачей
  * @param i Счетчик
  */
-
-const addNewTask = (id, content = {}, i = 0) => bot.sendMessage(id, text[i], replyOptions)
+const addNewTask = (id, username, content = {}, i = 0) => bot.sendMessage(id, text[i], replyOptions)
   .then(({chat, message_id}) => {
     bot.onReplyToMessage(chat.id, message_id, message => {
       content[keys[i]] = message.text
       if (i < text.length - 1)
-        addNewTask(id, content, ++i)
+        addNewTask(id, username, content, ++i)
       else {
+        content[keys[0]] += `\n\nАвтор задачи: @${username}\n`
         bot.sendMessage(id, 'Молодец! Задача будет добавлена!')
         addNewTaskMethod(content, id).then(() => Promise.resolve())
       }
     })
   })
 
-bot.onText(/\/add_new_task/, ({chat: {id}}) => addNewTask(id))
-
-
-//getLeadersTable().then(p => p.forEach(p => raw.concat(`@${p.username} - ${p.score} баллов\n`)))
+bot.onText(/\/add_new_task/, ({chat: {id, username}}) => addNewTask(id, username))
 
 /**
- * Выводим таблицу лидеров
+ * Выводим таблицу лидеров и место пользователя в рейтинге
  */
-bot.onText(/\/table/, msg => {
+bot.onText(/\/table/, async ({chat: {id}}) => {
   const header = 'Таблица лидеров:\n\n'
+  const {total} = await getMyPosition(id)
+  const footer = 'Ваше место в рейтинге: '
+
   getLeadersTable()
-    .then(data => bot.sendMessage(msg.chat.id, header + pipe(
-      map(({username, score}) => `${username}: ${score}`),
+    .then(data => bot.sendMessage(id, header + pipe(
+      map(({username, score}) => `@${username}: ${score}`),
       join('\n')
-    )(data)))
+    )(data) + '\n\n' + footer + (total + 1)))
 })
